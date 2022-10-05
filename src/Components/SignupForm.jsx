@@ -141,7 +141,13 @@ const SignupForm = () => {
                     </Grid>
                   </Grid>
                 </CardContent>
-                <CardActions>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Button
                     disabled={!dirty || !isValid}
                     variant="contained"

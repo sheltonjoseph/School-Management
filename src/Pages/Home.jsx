@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import SchoolImg from "../images/Purple High School Logo.png"
-import Login from '../Components/LoginForm';
-import SignupForm from '../Components/SignupForm';
+import SignInOutContainer from '../Components/SignupIn';
 
 export const Home = () => {
   return (
@@ -10,7 +9,7 @@ export const Home = () => {
         <Image src={SchoolImg}></Image>
         <SiginContainers>
             {/* <Login/> */}
-            <SignupForm/>
+            <SignInOutContainer />
         </SiginContainers>
     </Container>
   )
