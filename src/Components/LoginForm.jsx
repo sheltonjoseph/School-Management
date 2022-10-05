@@ -1,20 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-
 const Login = () => {
-  const [checked, setChecked] = React.useState(true);
-
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
-
+  const [userName, setUserName] = useState("");
+  const [password, SetPassword] = useState("");
   return (
     <div>
-      <Paper sx={{ padding: "10px 50px" }}>
+      <Paper sx={{ padding: "20px 20px" }}>
         <Grid
           container
           spacing={3}
@@ -22,17 +17,30 @@ const Login = () => {
           justify={"center"}
           alignItems={"center"}
           marginBottom={5}
-          paddingBottom={3}
         >
-
           <Grid item xs={12}>
-            <TextField label="Username"></TextField>
+            <TextField
+              label="Username"
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
+              value={userName}
+            ></TextField>
           </Grid>
           <Grid item xs={12}>
-            <TextField label="Password" type={"password"}></TextField>
+            <TextField
+              label="Password"
+              type={"password"}
+              onChange={(e) => {
+                SetPassword(e.target.value);
+              }}
+              value={password}
+            ></TextField>
           </Grid>
           <Grid item xs={15}>
-            <Button variant="contained"> Login </Button>
+            <Button variant="contained" disabled={!userName || !password}>
+              Login{" "}
+            </Button>
           </Grid>
         </Grid>
       </Paper>
