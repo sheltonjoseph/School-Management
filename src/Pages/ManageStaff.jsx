@@ -3,6 +3,7 @@ import Container from "@mui/material/Container";
 import NavBar from "../Components/navBar";
 import Typography from "@mui/material/Typography";
 import EmployeeCard from "../Components/EmployeeCard";
+import StudentCard from "../Components/StudentCard";
 import { sampleEmployee } from "../sampledata";
 
 const ManageStaff = () => {
@@ -29,6 +30,7 @@ const ManageStaff = () => {
             <EmployeeCard item={item} />
           ))}
         </div>
+        {/* <StudentCard/> */}
       </Container>
     </div>
   );
