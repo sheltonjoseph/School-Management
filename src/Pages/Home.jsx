@@ -3,7 +3,7 @@ import styled from "styled-components";
 import SchoolImg from "../images/Purple High School Logo.png"
 import SignInOutContainer from '../Components/SignupIn';
 
-export const Home = () => {
+ const Home = () => {
   return (
     <Container>
         <Image src={SchoolImg}></Image>
@@ -29,3 +29,5 @@ const SiginContainers = styled.div`
   align-Items:center;
   justify-Content:center
 `;
+
+export default Home
