@@ -4,8 +4,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 
 const ManageDash = () => {
   const SelectSmall = () => {
@@ -36,10 +36,10 @@ const ManageDash = () => {
     <div>
       <NavBar />
       <Container maxWidth="m">
-      <SelectSmall />
-      <Typography variant="h3" gutterBottom sx={{textAlign:"center"}}>
-       Reports Based on Last Month
-      </Typography>
+        <SelectSmall />
+        <Typography variant="h3" gutterBottom sx={{ textAlign: "center" }}>
+          Reports Based on Last Month
+        </Typography>
       </Container>
     </div>
   );
