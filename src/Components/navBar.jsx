@@ -107,7 +107,7 @@ const NavBar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -174,12 +174,12 @@ const NavBar = () => {
         <Divider />
         <ListItem >
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="StudentsList" />
+            <ListItemText primary="Manage Teachers" />
           </ListItemButton>
         </ListItem>
         <ListItem >
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Teacher'sList" />
+            <ListItemText primary="Manage Students" />
           </ListItemButton>
         </ListItem>
       </List>

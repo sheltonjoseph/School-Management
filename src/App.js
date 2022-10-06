@@ -1,11 +1,11 @@
-import { Home } from './Pages/Home';
-import StudentsList from './Pages/StudentsList.jsx';
+import  Home  from './Pages/Home';
+import ManageDash from './Pages/ManageDash.jsx';
 
 function App() {
   return (
     <div className="App">
 {/* <Home/> */}
-<StudentsList/>
+<ManageDash/>
     </div>
   );
 }
