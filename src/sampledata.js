@@ -34,22 +34,22 @@ export const sampleEmployee = [
 export const sampleStudent = [
   {
     id: 1,
-    name: "Rajendra chola",
+    name: "Arivu",
   },
   {
     id: 2,
-    name: "Mani rathinam",
+    name: "Bala",
   },
   {
     id: 3,
-    name: "Akbar",
+    name: "Clyn",
   },
   {
     id: 4,
-    name: "Tipu Sultan",
+    name: "Dixcy",
   },
   {
     id: 5,
-    name: "Karikala Chola",
+    name: "Elon",
   },
 ];
