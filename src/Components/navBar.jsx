@@ -182,6 +182,21 @@ const NavBar = () => {
             <ListItemText primary="Manage Students" />
           </ListItemButton>
         </ListItem>
+        <ListItem >
+          <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemText primary="Manage Class" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem >
+          <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemText primary="Attendence List" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem >
+          <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemText primary="Assesment Lists" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
