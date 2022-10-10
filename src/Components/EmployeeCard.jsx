@@ -6,11 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
-import Popover from "@mui/material/Popover";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import EditTeachers from "./EditTeachers";
 import DeleteDialog from "./DeleteDialog";
 
 const EmployeeCard = ({ item }) => {
@@ -22,14 +18,8 @@ const EmployeeCard = ({ item }) => {
     setPopOpen(true);
   };
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
@@ -55,37 +45,10 @@ const EmployeeCard = ({ item }) => {
           <EditIcon />
         </IconButton>
         <IconButton aria-label="share" onClick={handleClickOpen}>
-          <DeleteIcon /> 
+          <DeleteIcon />
         </IconButton>
       </CardActions>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <Typography sx={{ p: 2 }}>Set as ClassTeacher</Typography>{" "}
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="demo-select-small">Grade</InputLabel>
-            <Select
-              labelId="demo-select-small"
-              id="demo-select-small"
-              value={age}
-              label="Age"
-              onChange={handleChange}
-            >
-              <MenuItem value={1}>one</MenuItem>
-              <MenuItem value={2}>Two</MenuItem>
-              <MenuItem value={3}>Three</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-      </Popover>
+      <EditTeachers anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
       <DeleteDialog
         handleClickOpen={handleClickOpen}
         popOpen={popOpen}
