@@ -7,8 +7,8 @@ import Select from "@mui/material/Select";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { AgGridReact } from "ag-grid-react";
-import "ag-grid-enterprise/dist/styles/ag-grid.css";
-import "ag-grid-enterprise";
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 const columnDefs = [
     { field:"Roll_No"},
     { field:"Name"},
@@ -159,7 +159,7 @@ const ManageMarks = () => {
             </div>
           </div>
         </div>
-        <div  className="ag-theme-material" style={{height:'65vh'}}>
+        <div  className="ag-theme-alpine" style={{height:'65vh', margin:5}}>
       <AgGridReact rowData={rowData} columnDefs={columnDefs} />
     </div>
       </Container>
