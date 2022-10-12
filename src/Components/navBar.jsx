@@ -168,33 +168,45 @@ const NavBar = () => {
       <List>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Managing Staff" />
+            <Link to={"/ManageDash"}>
+              <ListItemText primary="Managing Staff" />
+            </Link>
           </ListItemButton>
         </ListItem>
         <Divider />
-        <ListItem >
+        <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Manage Teachers" />
+            <Link to={"/ManageStaff"}>
+              <ListItemText primary="Manage Teachers" />
+            </Link>
           </ListItemButton>
         </ListItem>
-        <ListItem >
+        <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Manage Students" />
+            <Link to={"/ManageStudents"}>
+              <ListItemText primary="Manage Students" />
+            </Link>
           </ListItemButton>
         </ListItem>
-        <ListItem >
+        <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Manage Class" />
+            <Link to={"/ManageClass"}>
+              <ListItemText primary="Manage Class" />
+            </Link>
           </ListItemButton>
         </ListItem>
-        <ListItem >
+        <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Attendence List" />
+            <Link to={"/ManageAttendence"}>
+              <ListItemText primary="Attendence List" />
+            </Link>
           </ListItemButton>
         </ListItem>
-        <ListItem >
+        <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Assesment Lists" />
+            <Link to={"/ManageMarks"}>
+              <ListItemText primary="Assesment Lists" />
+            </Link>
           </ListItemButton>
         </ListItem>
       </List>
