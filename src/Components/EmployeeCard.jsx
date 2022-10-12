@@ -11,7 +11,6 @@ import DeleteDialog from "./DeleteDialog";
 
 const EmployeeCard = ({ item }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [age, setAge] = React.useState("");
   const [popOpen, setPopOpen] = React.useState(false);
 
   const handleClickOpen = () => {
