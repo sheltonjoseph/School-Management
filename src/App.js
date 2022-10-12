@@ -5,6 +5,8 @@ import ManageStudents from './Pages/ManageStudents';
 import ManageAttendence from './Pages/ManageAttendence';
 import ManageMarks from './Pages/ManageMarks';
 import ManageClass from './Pages/ManageClass';
+import MarkAttendence from './Pages/MarkAttendence';
+import EnterMarks from './Pages/EnterMarks';
 
 
 
@@ -17,7 +19,9 @@ function App() {
 {/* <ManageStudents/> */}
 {/* <ManageAttendence/> */}
 {/* <ManageMarks/> */}
-<ManageClass/>
+{/* <ManageClass/> */}
+{/* <MarkAttendence/>  */}
+<EnterMarks/>
     </div>
   );
 }
