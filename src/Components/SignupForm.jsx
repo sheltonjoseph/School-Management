@@ -5,24 +5,22 @@ import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import CardActions from "@mui/material/CardActions";
-import Checkbox from "@mui/material/Checkbox";
-import ListItemText from "@mui/material/ListItemText";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
-
-
+import { Select } from "formik-material-ui";
 
 const options = [
   { label: "Managing Staff", value: "Managing Staff" },
   { label: "Teaching Staff", value: "Teaching Staff" },
 ];
-const subjectOptions = [
-  { label: "Managing Staff", value: "Managing Staff" },
-  { label: "Teaching Staff", value: "Teaching Staff" },
+const SubjectOptions = [
+  { label: "language", value: 1 },
+  { label: "English", value: 2 },
+  { label: "Maths", value: 3 },
 ];
+
 //password validation
 const lowercaseRegEx = /(?=.*[a-z])/;
 const uppercaseRegEx = /(?=.*[A-Z])/;
@@ -34,6 +32,8 @@ let validationSchema = Yup.object().shape({
   firstName: Yup.string().required("Required"),
   lastName: Yup.string().required("Required"),
   role: Yup.string().required("Required"),
+  subjects: Yup.array().min(1).required("Required"),
+  gender:Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
     .matches(
@@ -50,15 +50,16 @@ let validationSchema = Yup.object().shape({
 });
 
 const SignupForm = () => {
-  const [initialValues, setInitialValues] = React.useState({
+  const initialValues = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     role: "",
-    subjects:[],
-  });
+    subjects: [],
+  };
   const onSubmit = async (values) => {
+    console.log(values);
     try {
       const body = values;
       console.log(body);
@@ -72,13 +73,7 @@ const SignupForm = () => {
       console.error(err.message);
     }
   };
-  const subjets = [
-    'Language',
-    'English',
-    'Maths',
-    'Science',
-    'Social',
-  ];
+
   return (
     <div>
       <Paper>
@@ -88,28 +83,14 @@ const SignupForm = () => {
           onSubmit={onSubmit}
         >
           {({ dirty, isValid, values, handleChange, handleBlur }) => {
-           handleChange=(event) =>{
-            if(event.target.name === 'subjects'){
-              let subjectData = [...initialValues.subjects, ...event.target.value]
-              setInitialValues({...initialValues,[event.target.name]:subjectData})
-            }else{
-            setInitialValues({...initialValues,[event.target.name]:event.target.value})
-            }
-           }
-           return (
+            return (
               <Form>
                 <CardContent>
-                  <Grid
-                    container
-                    spacing={3}
-                    direction={"column"}
-                    // justify={"center"}
-                    // alignItems={"center"}
-                  >
+                  <Grid container spacing={3} direction={"column"}>
                     <Grid item xs={12} sm={6} md={6}>
                       <Field
                         label="First Name"
-                        variant="outlined"
+                        variant="standard"
                         fullWidth
                         name="firstName"
                         value={values.firstName}
@@ -119,7 +100,7 @@ const SignupForm = () => {
                     <Grid item xs={12} sm={6} md={6}>
                       <Field
                         label="Last Name"
-                        variant="outlined"
+                        variant="standard"
                         fullWidth
                         name="lastName"
                         value={values.lastName}
@@ -130,7 +111,7 @@ const SignupForm = () => {
                     <Grid item xs={12} sm={6} md={6}>
                       <Field
                         label="Email"
-                        variant="outlined"
+                        variant="standard"
                         fullWidth
                         name="email"
                         value={values.email}
@@ -140,10 +121,9 @@ const SignupForm = () => {
                     <Grid item xs={12} sm={6} md={6}>
                       <Field
                         label="Password"
-                        variant="outlined"
+                        variant="standard"
                         fullWidth
                         name="password"
-                        onChange={handleChange}
                         value={values.password}
                         type="password"
                         component={TextField}
@@ -151,46 +131,83 @@ const SignupForm = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
                       <InputLabel id="demo-simple-select-outlined-label">
-                        Type of Staff
+                        Gender
                       </InputLabel>
-                      <Select
-                        fullWidth
-                        label="Type"
-                        variant="outlined"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.role}
-                        name="role"
+                      <div
+                        role="group"
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 10,
+                          padding: 5,
+                        }}
                       >
-                        {options.map((item) => (
-                          <MenuItem key={item.value} value={item.value}>
-                            {item.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                        <label>
+                          <Field type="radio" name="gender" value="Male" />
+                          Male
+                        </label>
+                        <label>
+                          <Field type="radio" name="gender" value="Female" />
+                          Female
+                        </label>
+                        <label>
+                          <Field type="radio" name="gender" value="Others" />
+                          Others
+                        </label>
+                      </div>
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
                       <InputLabel id="demo-simple-select-outlined-label">
-                        Select Subjects
+                        Type of Staff
                       </InputLabel>
-                      <Select
-                      labelId="demo-multiple-checkbox-label"
-                      id="demo-multiple-checkbox"
+
+                      <Field
                         fullWidth
-                        label="Type"
-                        variant="outlined"
+                        variant="standard"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.subjects}
-                        name="subjects"
+                        value={values.role}
+                        component={Select}
+                        name="role"
+                        sx={{ minWidth: "380px" }}
                       >
-                     {subjets.map((sub) => (
-            <MenuItem key={sub} value={sub}>
-              <Checkbox checked={subjectOptions.indexOf(sub) > -1} />
-              <ListItemText primary={sub} />
-            </MenuItem>
-          ))}
-                      </Select>
+                        {options.map((item) => (
+                          <MenuItem
+                            fullWidth
+                            key={item.value}
+                            value={item.value}
+                          >
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                      <InputLabel id="demo-simple-select-outlined-label">
+                        Select Subjets
+                      </InputLabel>
+                      <Field
+                        fullWidth
+                        variant="standard"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        multiple={true}
+                        value={values.subjects}
+                        component={Select}
+                        name="subjects"
+                        sx={{ minWidth: "380px" }}
+                      >
+                        {SubjectOptions.map((item) => (
+                          <MenuItem
+                            fullWidth
+                            key={item.value}
+                            value={item.value}
+                          >
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Field>
                     </Grid>
                   </Grid>
                 </CardContent>

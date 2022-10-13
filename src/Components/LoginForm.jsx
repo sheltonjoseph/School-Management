@@ -17,10 +17,12 @@ const Login = () => {
           justify={"center"}
           alignItems={"center"}
           marginBottom={5}
+    
         >
           <Grid item xs={12}>
             <TextField
               label="Username"
+              variant="standard"
               onChange={(e) => {
                 setUserName(e.target.value);
               }}
@@ -30,6 +32,7 @@ const Login = () => {
           <Grid item xs={12}>
             <TextField
               label="Password"
+              variant="standard"
               type={"password"}
               onChange={(e) => {
                 SetPassword(e.target.value);
