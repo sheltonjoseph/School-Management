@@ -33,23 +33,38 @@ export const sampleEmployee = [
 
 export const sampleStudent = [
   {
-    id: 1,
+    rollno: 1,
     name: "Arivu",
+    class:"Grade 2",
+    gender: "male",
+    dob: "13/12/19"
   },
   {
-    id: 2,
-    name: "Bala",
+    rollno: 2,
+    name: "Sanjay",
+    class:"Grade 2",
+    gender: "male",
+    dob: "13/12/15"
   },
   {
-    id: 3,
-    name: "Clyn",
+    rollno: 3,
+    name: "Cyrus",
+    class:"Grade 2",
+    gender: "male",
+    dob: "13/12/19"
   },
   {
-    id: 4,
-    name: "Dixcy",
+    rollno: 4,
+    name: "Emma",
+    class:"Grade 2",
+    gender: "Female",
+    dob: "13/12/19"
   },
   {
-    id: 5,
-    name: "Elon",
+    rollno: 5,
+    name: "Thagavelu",
+    class:"Grade 2",
+    gender: "male",
+    dob: "13/12/19"
   },
 ];

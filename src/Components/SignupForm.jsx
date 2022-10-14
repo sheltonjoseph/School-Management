@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -10,6 +10,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
 import { Select } from "formik-material-ui";
+// import PreviewImage from "./PreviewImg";
 
 const options = [
   { label: "Managing Staff", value: "Managing Staff" },
@@ -33,7 +34,7 @@ let validationSchema = Yup.object().shape({
   lastName: Yup.string().required("Required"),
   role: Yup.string().required("Required"),
   subjects: Yup.array().min(1).required("Required"),
-  gender:Yup.string().required("Required"),
+  gender: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
     .matches(
@@ -57,6 +58,7 @@ const SignupForm = () => {
     password: "",
     role: "",
     subjects: [],
+    // img: null,
   };
   const onSubmit = async (values) => {
     console.log(values);
@@ -73,7 +75,7 @@ const SignupForm = () => {
       console.error(err.message);
     }
   };
-
+  // const fileRef = useRef(null);
   return (
     <div>
       <Paper>
@@ -82,7 +84,14 @@ const SignupForm = () => {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ dirty, isValid, values, handleChange, handleBlur }) => {
+          {({
+            dirty,
+            isValid,
+            values,
+            handleChange,
+            setFieldValue,
+            handleBlur,
+          }) => {
             return (
               <Form>
                 <CardContent>
@@ -209,6 +218,22 @@ const SignupForm = () => {
                         ))}
                       </Field>
                     </Grid>
+                    {/* <Grid item xs={12} sm={6} md={6}>
+                      <input
+                      ref={fileRef}
+                        hidden
+                        type="file"
+                        onChange={(event) => {
+                          setFieldValue("img", event.target.files[0]);
+                        }}
+                      />
+                      <Button
+                        onClick={() => {
+                          fileRef.current.click();
+                        }}
+                      >Upload Img</Button>
+                      {values.img && <PreviewImage img={values.img} />}
+                    </Grid> */}
                   </Grid>
                 </CardContent>
                 <CardActions

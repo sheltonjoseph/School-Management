@@ -80,8 +80,7 @@ const ManageStudents = () => {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            flexDirection: "row",
             flexWrap: "wrap",
             margin: "20px",
           }}

@@ -7,15 +7,19 @@ import { sampleEmployee } from "../sampledata";
 
 
 const ManageStaff = () => {
+
   return (
     <div>
       <NavBar />
-      <Container maxWidth="m">
-        <Typography
-          variant="h3"
-          gutterBottom
-          sx={{ textAlign: "center", marginTop: "20px" }}
-        >
+      <Container
+  maxWidth={false}
+
+        // sx={{
+        //   backgroundImage:
+        //     "radial-gradient( circle 400px at 6.8% 8.3%,  rgba(255,244,169,1) 0%, rgba(255,244,234,1) 100.2% )",
+        // }}
+      >
+        <Typography variant="h3" gutterBottom sx={{ margin: 5 }}>
           Manage Staff
         </Typography>
         <div
@@ -23,7 +27,7 @@ const ManageStaff = () => {
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
-            margin: "40px",
+            margin: "12px",
           }}
         >
           {sampleEmployee.map((item) => (

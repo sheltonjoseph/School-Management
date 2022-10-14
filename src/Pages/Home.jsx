@@ -22,6 +22,8 @@ const Container = styled.div`
 `;
 const Image = styled.img`
   object-fit: contain;
+  flex:1;
+  display: flex;
 `;
 const SiginContainers = styled.div`
   flex:1;

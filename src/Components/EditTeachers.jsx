@@ -11,10 +11,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
-
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,28 +25,20 @@ const MenuProps = {
   },
 };
 
-const subjets = [
-    'Language',
-    'English',
-    'Maths',
-    'Science',
-    'Social',
-
-  ];
+const subjets = ["Language", "English", "Maths", "Science", "Social"];
 const EditTeachers = ({ anchorEl, setAnchorEl }) => {
+  const [personName, setPersonName] = React.useState([]);
 
-    const [personName, setPersonName] = React.useState([]);
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
 
-    const handleChange = (event) => {
-      const {
-        target: { value },
-      } = event;
-      setPersonName(
-        // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
-      );
-    };
- 
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -72,6 +62,9 @@ const EditTeachers = ({ anchorEl, setAnchorEl }) => {
           alignItems: "center",
           minWidth: "300px",
           padding: "20px",
+          borderStyle: "solid",
+          borderColor: "rgb(209, 175, 53)",
+          borderWidth: "3px",
         }}
       >
         <Typography>Edit Teacher</Typography>
@@ -109,32 +102,26 @@ const EditTeachers = ({ anchorEl, setAnchorEl }) => {
             <FormControlLabel value="other" control={<Radio />} label="Other" />
           </RadioGroup>
         </FormControl>
-        <TextField
-          id="standard-basic"
-          label="DOB"
-          variant="standard"
-          sx={{ width: "100%" }}
-        />
-         <FormControl sx={{marginTop: 2 , width:'100%' }}>
-        <InputLabel id="demo-multiple-checkbox-label">Subjects</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {subjets.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+
+        <FormControl sx={{ marginTop: 2, width: "100%" }}>
+          <InputLabel id="demo-simple-select-filled-label">Subjects</InputLabel>
+          <Select
+            multiple
+            label="Subjets"
+            variant="standard"
+            value={personName}
+            onChange={handleChange}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MenuProps}
+          >
+            {subjets.map((name) => (
+              <MenuItem key={name} value={name}>
+                <Checkbox checked={personName.indexOf(name) > -1} />
+                <ListItemText primary={name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Button
           variant="contained"
           sx={{
@@ -142,7 +129,7 @@ const EditTeachers = ({ anchorEl, setAnchorEl }) => {
             "&:hover": {
               backgroundColor: "#d1af35",
             },
-            marginTop: 3,
+            marginTop: 2,
           }}
         >
           Done

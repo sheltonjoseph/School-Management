@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import EditTeachers from "./EditTeachers";
 import DeleteDialog from "./DeleteDialog";
+import CardMedia from "@mui/material/CardMedia";
+import DefaultProfile from "../images/DefaultProfile.png";
 
 const EmployeeCard = ({ item }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -21,30 +23,47 @@ const EmployeeCard = ({ item }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
   return (
-    <Card sx={{ maxWidth: 275, minWidth: 250, boxShadow: 10, margin: 6 }}>
+    <Card
+      sx={{
+        maxWidth: 275,
+        minWidth: 175,
+        boxShadow: 10,
+        margin: 2,
+        background: "rgb(209, 175, 53)",
+        p: 1,
+        borderRadius: "10px",
+        borderStyle: "solid",
+        borderColor: "white",
+        borderWidth: "3px",
+      }}
+    >
+      <CardMedia
+        component="img"
+        height="180"
+        image={DefaultProfile}
+        sx={{ objectFit: "fill", borderRadius: "100px" }}
+      />
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} gutterBottom>
+        <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
           Employee ID : {item.id}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} gutterBottom>
+        <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
           Name : {item.name}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} gutterBottom>
+        <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
           Subjects : {item.subjets}
         </Typography>
-        <Typography sx={{ fontSize: 14 }} gutterBottom>
+        <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
           ClassTeacher : {item.isClassTeacher ? "yes" : "No"}
         </Typography>
       </CardContent>
       <CardActions>
         <IconButton aria-label="add to favorites" onClick={handleClick}>
-          <EditIcon />
+          <EditIcon sx={{ color: "white" }} />
         </IconButton>
         <IconButton aria-label="share" onClick={handleClickOpen}>
-          <DeleteIcon />
+          <DeleteIcon sx={{ color: "white" }} />
         </IconButton>
       </CardActions>
       <EditTeachers anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
