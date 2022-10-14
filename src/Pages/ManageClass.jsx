@@ -27,8 +27,8 @@ const ManageClass = () => {
   const columnDefs = [
     { field: "Subjects" },
     {
-        headerName: 'Select Teacher',
-        field: 'Teacher',
+      headerName: "Select Teacher",
+      field: "Teacher",
       cellEditor: "agSelectCellEditor",
       cellRenderer: TeacherRender,
       cellEditorParams: {
@@ -106,10 +106,19 @@ const ManageClass = () => {
     <div>
       <NavBar />
       <Container maxWidth="m">
-        <SelectSmall />
-        <Typography variant="h3" gutterBottom sx={{ textAlign: "center" }}>
-          Manage Class
-        </Typography>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: 30,
+          }}
+        >
+          <Typography variant="h3" gutterBottom sx={{ textAlign: "center" }}>
+            Manage Class
+          </Typography>
+          '<SelectSmall />
+        </div>
+
         <div
           style={{
             display: "flex",

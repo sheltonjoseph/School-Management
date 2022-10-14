@@ -33,7 +33,7 @@ const ManageStudents = () => {
             margin: 30,
           }}
         >
-          <Typography variant="h3" gutterBottom sx={{ textAlign: "center" }}>
+          <Typography variant="h3" gutterBottoms>
             Manage Students
           </Typography>
           <div
@@ -58,12 +58,7 @@ const ManageStudents = () => {
                 <MenuItem value={3}>Three</MenuItem>
               </Select>
             </FormControl>
-          </div>
-        </div>
-        <div
-          style={{ display: "flex", justifyContent: "flex-end", margin: 30 }}
-        >
-          <Button
+            <Button
             variant="contained"
             endIcon={<AddCircleIcon />}
             sx={{
@@ -76,14 +71,15 @@ const ManageStudents = () => {
           >
             Add Student
           </Button>
+          </div>
         </div>
+ 
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            flexDirection: "row",
             flexWrap: "wrap",
-            margin: "20px",
+            margin: "15px",
           }}
         >
           {sampleStudent.map((item) => (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -10,6 +10,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
 import { Select } from "formik-material-ui";
+import PreviewImage from "./PreviewImg";
+import { SignupRequest } from "../RequestMethod";
 
 const options = [
   { label: "Managing Staff", value: "Managing Staff" },
@@ -33,7 +35,7 @@ let validationSchema = Yup.object().shape({
   lastName: Yup.string().required("Required"),
   role: Yup.string().required("Required"),
   subjects: Yup.array().min(1).required("Required"),
-  gender:Yup.string().required("Required"),
+  gender: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
     .matches(
@@ -57,16 +59,19 @@ const SignupForm = () => {
     password: "",
     role: "",
     subjects: [],
+    img: "",
   };
+  const [file, setFile] = React.useState(null);
   const onSubmit = async (values) => {
     console.log(values);
+
     try {
       const body = values;
+      let isManagingStaff = body.role === "Managing Staff" ? true : false;
       console.log(body);
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
+      const response = await SignupRequest.post("auth/register", {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ ...body, isManagingStaff: isManagingStaff }),
       });
       console.log(response);
     } catch (err) {
@@ -74,6 +79,7 @@ const SignupForm = () => {
     }
   };
 
+  const fileRef = useRef(null);
   return (
     <div>
       <Paper>
@@ -82,7 +88,14 @@ const SignupForm = () => {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ dirty, isValid, values, handleChange, handleBlur }) => {
+          {({
+            dirty,
+            isValid,
+            values,
+            handleChange,
+            setFieldValue,
+            handleBlur,
+          }) => {
             return (
               <Form>
                 <CardContent>
@@ -209,6 +222,30 @@ const SignupForm = () => {
                         ))}
                       </Field>
                     </Grid>
+                    {/* <Grid item xs={12} sm={6} md={6}>
+                      <input
+                        ref={fileRef}
+                        hidden
+                        type="file"
+                        onChange={(event) => {
+                          setFile(event.target.value);
+                          console.log(file);
+                          const reader = new FileReader();
+                          reader.readAsDataURL(file);
+                          reader.onload = () => {
+                            setFieldValue("img", reader.result[0]);
+                          };
+                        }}
+                      />
+                      <Button
+                        onClick={() => {
+                          fileRef.current.click();
+                        }}
+                      >
+                        Upload Img
+                      </Button>
+                      {file && <PreviewImage img={initialValues.img} />}
+                    </Grid> */}
                   </Grid>
                 </CardContent>
                 <CardActions

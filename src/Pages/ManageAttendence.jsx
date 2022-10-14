@@ -13,8 +13,8 @@ import "ag-grid-enterprise";
 
 const AttendenceTable = () => {
   const columnDefs = [
-    { field: "Date" },
-    { field: "Roll_No" },
+    { field: "Date" ,width: 130 },
+    { field: "Roll_No" , width: 130  },
     { field: "Name" },
     { field: "Language" },
     { field: "English" },
@@ -86,7 +86,7 @@ const AttendenceTable = () => {
     },
   ];
   return (
-    <div className="ag-theme-alpine" style={{ height: "65vh" }}>
+    <div className="ag-theme-alpine" style={{ height: "65vh" , margin:10  }}>
       <AgGridReact rowData={rowData} columnDefs={columnDefs} />
     </div>
   );
@@ -121,10 +121,18 @@ const ManageAttendence = () => {
     <div>
       <NavBar />
       <Container maxWidth="m">
-        <SelectSmall />
-        <Typography variant="h3" gutterBottom sx={{ textAlign: "center" }}>
-          Attendence List
-        </Typography>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: 20,
+          }}
+        >
+          <Typography variant="h3" gutterBottom>
+            Attendence List
+          </Typography>
+          <SelectSmall />
+        </div>
         <AttendenceTable />
       </Container>
     </div>

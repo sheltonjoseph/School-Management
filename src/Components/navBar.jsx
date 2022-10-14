@@ -22,6 +22,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,10 +66,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const drawerWidth = 240;
@@ -80,6 +82,7 @@ const NavBar = () => {
   };
 
   const handleMenuClose = () => {
+    navigate("/");
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -89,6 +92,7 @@ const NavBar = () => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  const { currentUser } = useSelector((state) => state.staff);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -169,43 +173,72 @@ const NavBar = () => {
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: "center" }}>
             <Link to={"/ManageDash"}>
-              <ListItemText primary="Managing Staff" />
+              <ListItemText
+                primary={
+                  currentUser.isManagingStaff
+                    ? "Managing Staff"
+                    : "Teaching Staff"
+                }
+              />
             </Link>
           </ListItemButton>
         </ListItem>
         <Divider />
+        {currentUser.isManagingStaff && (
+          <>
+            <ListItem>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <Link to={"/ManageStaff"}>
+                  <ListItemText primary="Manage Teachers" />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+            <ListItem>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <Link to={"/ManageStudents"}>
+                  <ListItemText primary="Manage Students" />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+            <ListItem>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <Link to={"/ManageClass"}>
+                  <ListItemText primary="Manage Class" />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
+
         <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageStaff"}>
-              <ListItemText primary="Manage Teachers" />
+            <Link
+              to={
+                currentUser.isManagingStaff
+                  ? "/ManageAttendence"
+                  : "/MarkAttendence"
+              }
+            >
+              <ListItemText
+                primary={
+                  currentUser.isManagingStaff
+                    ? "ManageAttendence"
+                    : "MarkAttendence"
+                }
+              />
             </Link>
           </ListItemButton>
         </ListItem>
         <ListItem>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageStudents"}>
-              <ListItemText primary="Manage Students" />
-            </Link>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageClass"}>
-              <ListItemText primary="Manage Class" />
-            </Link>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageAttendence"}>
-              <ListItemText primary="Attendence List" />
-            </Link>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageMarks"}>
-              <ListItemText primary="Assesment Lists" />
+            <Link
+              to={currentUser.isManagingStaff ? "/ManageMarks" : "/EnterMarks"}
+            >
+              <ListItemText
+                primary={
+                  currentUser.isManagingStaff ? "ManageMarks" : "EnterMarks"
+                }
+              />
             </Link>
           </ListItemButton>
         </ListItem>

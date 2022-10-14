@@ -159,7 +159,7 @@ const ManageMarks = () => {
             </div>
           </div>
         </div>
-        <div  className="ag-theme-alpine" style={{height:'65vh', margin:5}}>
+        <div  className="ag-theme-alpine" style={{height:'65vh', margin:40}}>
       <AgGridReact rowData={rowData} columnDefs={columnDefs} />
     </div>
       </Container>

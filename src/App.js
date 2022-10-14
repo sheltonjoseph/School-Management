@@ -9,7 +9,9 @@ import ManageClass from "./Pages/ManageClass";
 import MarkAttendence from "./Pages/MarkAttendence";
 import EnterMarks from "./Pages/EnterMarks";
 
+
 function App() {
+
   return (
     <Router>
       <Routes>
@@ -19,7 +21,9 @@ function App() {
         <Route exact path="/ManageStudents" element={<ManageStudents />} />
         <Route exact path="/ManageAttendence" element={<ManageAttendence />} />
         <Route exact path="/ManageMarks" element={<ManageMarks />} />
-        <Route exact path="/ManageClass" element={<EnterMarks />} />
+        <Route exact path="/ManageClass" element={<ManageClass />} />
+        <Route exact path="/MarkAttendence" element={<MarkAttendence />} />
+        <Route exact path="/EnterMarks " element={<EnterMarks />} />
       </Routes>
     </Router>
   );

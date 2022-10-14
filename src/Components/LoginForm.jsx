@@ -3,10 +3,31 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useDispatch, useSelector } from "react-redux";
+import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
+import { loginFailure, loginStart, loginSuccess } from "../redux/userRedux";
+import { SignupRequest } from "../RequestMethod";
 
 const Login = () => {
-  const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const [password, SetPassword] = useState("");
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.staff);
+
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    dispatch(loginStart());
+    try {
+      const res = await SignupRequest.post("/auth/login", { email, password });
+      dispatch(loginSuccess(res.data));
+      navigate("/ManageDash");
+    } catch (err) {
+      dispatch(loginFailure());
+    }
+  };
   return (
     <div>
       <Paper sx={{ padding: "20px 20px" }}>
@@ -17,16 +38,15 @@ const Login = () => {
           justify={"center"}
           alignItems={"center"}
           marginBottom={5}
-    
         >
           <Grid item xs={12}>
             <TextField
               label="Username"
               variant="standard"
               onChange={(e) => {
-                setUserName(e.target.value);
+                setEmail(e.target.value);
               }}
-              value={userName}
+              value={email}
             ></TextField>
           </Grid>
           <Grid item xs={12}>
@@ -41,8 +61,22 @@ const Login = () => {
             ></TextField>
           </Grid>
           <Grid item xs={15}>
-            <Button variant="contained" disabled={!userName || !password}>
-              Login{" "}
+            {error && (
+              <Typography
+                variant="overline"
+                display="block"
+                gutterBottom
+                sx={{ color: "red" }}
+              >
+                Something went wrong
+              </Typography>
+            )}
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              disabled={!email || !password}
+            >
+              Login
             </Button>
           </Grid>
         </Grid>
