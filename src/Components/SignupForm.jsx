@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -12,15 +12,13 @@ import { TextField } from "formik-material-ui";
 import { Select } from "formik-material-ui";
 import PreviewImage from "./PreviewImg";
 import { SignupRequest } from "../RequestMethod";
+import CustomizedSnackbars from "../Components/SnackBar";
+import { update } from "../redux/snackRedux";
+import { useDispatch, useSelector } from "react-redux";
 
 const options = [
   { label: "Managing Staff", value: "Managing Staff" },
   { label: "Teaching Staff", value: "Teaching Staff" },
-];
-const SubjectOptions = [
-  { label: "language", value: 1 },
-  { label: "English", value: 2 },
-  { label: "Maths", value: 3 },
 ];
 
 //password validation
@@ -62,6 +60,30 @@ const SignupForm = () => {
     img: "",
   };
   const [file, setFile] = React.useState(null);
+  const [subOptions, setSubOptions] = useState([]);
+  const [getSubOptions, setGetSubOptions] = useState(true);
+
+  const getSubLookup = async () => {
+    try {
+      const res = await SignupRequest.get("/sublookup");
+      console.log(res.data);
+      setSubOptions(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (getSubOptions) {
+      getSubLookup();
+      setGetSubOptions(false);
+    }
+  });
+  // const dispatch = useDispatch();
+  // const reduxControl = useSelector((state) => state.dialog);
+  // const reduxOpen = reduxControl.snackOpen;
+  console.log(subOptions);
+
   const onSubmit = async (values) => {
     console.log(values);
 
@@ -71,10 +93,28 @@ const SignupForm = () => {
       console.log(body);
       const response = await SignupRequest.post("auth/register", {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...body, isManagingStaff: isManagingStaff }),
+        body: JSON.stringify({
+          ...body,
+          subjectId: body.subjects,
+          isManagingStaff: isManagingStaff,
+        }),
       });
       console.log(response);
+      // dispatch(
+      //   update({
+      //     state: reduxOpen,
+      //     isSuccess: true,
+      //     message: "Account Created Succesfully",
+      //   })
+      // );
     } catch (err) {
+      // dispatch(
+      //   update({
+      //     state: reduxOpen,
+      //     isSuccess: false,
+      //     message: "Something Went Wrong",
+      //   })
+      // );
       console.error(err.message);
     }
   };
@@ -108,6 +148,7 @@ const SignupForm = () => {
                         name="firstName"
                         value={values.firstName}
                         component={TextField}
+                        inputProps={{ "data-testid": "firstName" }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
@@ -118,6 +159,7 @@ const SignupForm = () => {
                         name="lastName"
                         value={values.lastName}
                         component={TextField}
+                        inputProps={{ "data-testid": "lastName" }}
                       />
                     </Grid>
 
@@ -129,6 +171,7 @@ const SignupForm = () => {
                         name="email"
                         value={values.email}
                         component={TextField}
+                        inputProps={{ "data-testid": "email" }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
@@ -140,6 +183,7 @@ const SignupForm = () => {
                         value={values.password}
                         type="password"
                         component={TextField}
+                        inputProps={{ "data-testid": "password" }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} md={6}>
@@ -155,6 +199,7 @@ const SignupForm = () => {
                           marginTop: 10,
                           padding: 5,
                         }}
+                        data-testid="gender"
                       >
                         <label>
                           <Field type="radio" name="gender" value="Male" />
@@ -184,6 +229,7 @@ const SignupForm = () => {
                         component={Select}
                         name="role"
                         sx={{ minWidth: "380px" }}
+                        inputProps={{ "data-testid": "role" }}
                       >
                         {options.map((item) => (
                           <MenuItem
@@ -210,14 +256,15 @@ const SignupForm = () => {
                         component={Select}
                         name="subjects"
                         sx={{ minWidth: "380px" }}
+                        inputProps={{ "data-testid": "subjects" }}
                       >
-                        {SubjectOptions.map((item) => (
+                        {subOptions.map((item) => (
                           <MenuItem
                             fullWidth
-                            key={item.value}
-                            value={item.value}
+                            key={item.subjectId}
+                            value={item.subjectId}
                           >
-                            {item.label}
+                            {item.subName}
                           </MenuItem>
                         ))}
                       </Field>
@@ -260,6 +307,7 @@ const SignupForm = () => {
                     variant="contained"
                     color="primary"
                     type="Submit"
+                    data-testid="register"
                   >
                     REGISTER
                   </Button>
@@ -269,6 +317,7 @@ const SignupForm = () => {
           }}
         </Formik>
       </Paper>
+      {/* <CustomizedSnackbars /> */}
     </div>
   );
 };

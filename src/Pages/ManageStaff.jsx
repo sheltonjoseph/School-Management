@@ -3,38 +3,55 @@ import Container from "@mui/material/Container";
 import NavBar from "../Components/navBar";
 import Typography from "@mui/material/Typography";
 import EmployeeCard from "../Components/EmployeeCard";
-import { sampleEmployee } from "../sampledata";
-import { useSelector } from "react-redux";
+import { SignupRequest } from "../RequestMethod";
 import { userRequest } from "../RequestMethod";
-
+import {Grid} from "@mui/material";
+import CustomizedSnackbars from "../Components/SnackBar";
 
 const ManageStaff = () => {
-
+  const [isGetUser, setIsGetUser] = useState(true);
   const [staffs, setStaffs] = useState([]);
+  const [subOptions, setSubOptions] = useState([]);
+
+  const getSubLookup = async () => {
+    try {
+      const res = await SignupRequest.get("/sublookup");
+      setSubOptions(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log(subOptions);
+  const getStaffs = async () => {
+    try {
+      const request = userRequest();
+      const res = await request.get("/staffs");
+      //  console.log(res)
+      setStaffs(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const getStaffs = async () => {
-      try {
-       const res = await userRequest.get("/staffs");
-       console.log(res)
-        setStaffs(res.data);
-      } catch (err) {
-        console.log(err)
-      }
-    };
-    getStaffs();
-  },[]);
+    if (isGetUser) {
+      getStaffs();
+      getSubLookup();
+      setIsGetUser(false);
+    }
+  });
 
   const deleteStaff = async (id) => {
     try {
-    const deleteStaff = await userRequest.delete(`/staffs/${id}`);
-      setStaffs(staffs.filter(staffs => staffs._id !== id))
+      const request = userRequest();
+     await request.delete(`/staffs/${id}`);
+      setStaffs(staffs.filter((staffs) => staffs._id !== id));
     } catch (err) {
       console.log(err.message);
     }
   };
 
-  console.log(staffs)
+  console.log(staffs);
   return (
     <div>
       <NavBar />
@@ -49,18 +66,27 @@ const ManageStaff = () => {
         <Typography variant="h3" gutterBottom sx={{ margin: 5 }}>
           Manage Staff
         </Typography>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            margin: "12px",
-          }}
-        >
-          {staffs.map((item) => (
-            <EmployeeCard item={item} deleteStaff={deleteStaff}/>
-          ))}
-        </div>
+        <Grid container spacing={1}>
+          {staffs.map((item) => {
+            let subjectName = [];
+            item.subjectId.forEach((i) => {
+              let currentSub = subOptions.filter((e) => e.subjectId === i);
+              subjectName.push(currentSub[0]?.subName);
+            });
+            return (
+            <Grid item xs={3}>
+              <EmployeeCard
+                item={item}
+                subjectName={subjectName.join(",")}
+                deleteStaff={deleteStaff}
+                setIsGetUser={setIsGetUser}
+                subOptions={subOptions}
+              />
+            </Grid>
+            );
+          })}
+        </Grid>
+        <CustomizedSnackbars />
       </Container>
     </div>
   );

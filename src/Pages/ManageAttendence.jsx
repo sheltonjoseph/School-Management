@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import NavBar from "../Components/navBar";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,113 +10,120 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import "ag-grid-enterprise";
-
-const AttendenceTable = () => {
-  const columnDefs = [
-    { field: "Date" ,width: 130 },
-    { field: "Roll_No" , width: 130  },
-    { field: "Name" },
-    { field: "Language" },
-    { field: "English" },
-    { field: "Maths" },
-    { field: "Science" },
-    { field: "Social" },
-  ];
-
-  const rowData = [
-    {
-      Date: "13/12/22",
-      Roll_No: 121,
-      Name: "Aashik",
-      Language: "Present",
-      English: "Present",
-      Maths: "Present",
-      Science: "Absent",
-      Social: "Present",
-    },
-    {
-      Date: "13/12/22",
-      Roll_No: 122,
-      Name: "Shankar",
-      Language: "Present",
-      English: "Present",
-      Maths: "Present",
-      Science: "Absent",
-      Social: "Present",
-    },
-    {
-      Date: "13/12/22",
-      Roll_No: 123,
-      Name: "Kumar",
-      Language: "Present",
-      English: "Present",
-      Maths: "Present",
-      Science: "Absent",
-      Social: "Present",
-    },
-    {
-      Date: "13/12/22",
-      Roll_No: 124,
-      Name: "Prakash",
-      Language: "Present",
-      English: "Present",
-      Maths: "Present",
-      Science: "Absent",
-      Social: "Present",
-    },
-    {
-      Date: "13/12/22",
-      Roll_No: 125,
-      Name: "Shadhik",
-      Language: "Present",
-      English: "Present",
-      Maths: "Present",
-      Science: "Absent",
-      Social: "Present",
-    },
-    {
-      Date: "13/12/22",
-      Roll_No: 126,
-      Name: "Shelton",
-      Language: "Present",
-      English: "Present",
-      Maths: "Present",
-      Science: "Absent",
-      Social: "Present",
-    },
-  ];
-  return (
-    <div className="ag-theme-alpine" style={{ height: "65vh" , margin:10  }}>
-      <AgGridReact rowData={rowData} columnDefs={columnDefs} />
-    </div>
-  );
-};
+import { userRequest, Attendence } from "../RequestMethod";
+import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
 
 const ManageAttendence = () => {
-  const SelectSmall = () => {
-    const [grade, setGrade] = React.useState("");
+  const columnDefsUpdate = [
+    { field: "rollNo" },
+    { headerName: "Student Name",field: "firstName" },
+    {
+      headerName: "Attendence Status",
+      // field: "attstatus",
+      cellRendererFramework: (props) => {
+        return (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Checkbox
+              size="small"
+              checked={props.data.attstatus}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        );
+      },
+      colId: "MarkAttendence",
+    },
+  ];
 
-    const handleChange = (event) => {
-      setGrade(event.target.value);
-    };
+  let d = new Date();
+  const [isGetData, setIsData] = useState(true);
+  const [grade, setGrade] = React.useState("");
+  const [classData, setClassData] = useState([]);
+  const [rowData, setRowData] = useState();
+  const [subOptions, setSubOptions] = useState([]);
+  const [subject, SelectSubject] = React.useState("");
+  const [attdate, setAttDate] = React.useState(`${d.getFullYear()}-${d.getMonth() + 1}-${'0' + d.getDate()}`);
 
-    return (
-      <FormControl sx={{ m: 5, minWidth: 120 }} size="small">
-        <InputLabel id="demo-select-small">Grade</InputLabel>
-        <Select
-          labelId="demo-select-small"
-          id="demo-select-small"
-          value={grade}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value={1}>Grade 1</MenuItem>
-          <MenuItem value={2}>Grade 2</MenuItem>
-          <MenuItem value={3}>Grade 3</MenuItem>
-        </Select>
-      </FormControl>
-    );
+  const handleChange = (event) => {
+    setGrade(event.target.value);
+    getInitialClassData(event.target.value,subject,attdate);
   };
+
+  const handleTestChange = (event) => {
+    SelectSubject(event.target.value);
+    getInitialClassData(grade,event.target.value,attdate);
+  };
+
+  const handleDateChange = (event) => {
+    console.log(event.target.value)
+    setAttDate(event.target.value);
+    getInitialClassData(grade, subject,event.target.value);
+  };
+  const getData = async () => {
+    try {
+      const request = userRequest();
+      const classRes = await request.get("/class");
+      const res2 = await request.get("/sublookup");
+      let defaultClass = classRes.data
+      let defaultSub = res2.data
+      console.log(defaultSub)
+      if(defaultClass.length>0 && defaultSub.length>0){
+        setSubOptions(res2.data);
+        setClassData(classRes.data);
+        setGrade(defaultClass[0]._id)
+        SelectSubject(defaultSub[0].subjectId)
+        setAttDate(attdate)
+        getInitialClassData(defaultClass[0]._id,defaultSub[0].subjectId,attdate)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  
+
+  const getInitialClassData = async (id,subject,date) => {
+    try {
+    //  const realDate = date ? date : date.now()
+      const request = userRequest();
+      const studRes = await request.get(`/students/class/${id}`);
+      const attRes = await Attendence.get(
+        `/attendence/class/${id}/${subject}/${date}`
+      );
+      let studentlist = studRes.data;
+      let attenRes = attRes.data;
+      let attsData = [];
+      studentlist.forEach((s) => {
+        let attData = attenRes.filter((d) => d.studentid === s._id);
+        s["attstatus"] = attData.length > 0 ? attData[0].attstatus : false;
+        attsData.push(s);
+      });
+      console.log(attsData);
+      setRowData(attsData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+
+
+  const defaultColDef = useMemo(() => {
+    return {
+      flex: 1,
+      resizable: true,
+      editable: true,
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isGetData) {
+      getData();
+      setIsData(false);
+    }
+  });
+
   return (
     <div>
       <NavBar />
@@ -124,16 +131,107 @@ const ManageAttendence = () => {
         <div
           style={{
             display: "flex",
+            alignItems: "center",
             justifyContent: "space-between",
-            margin: 20,
+            margin: 30,
           }}
         >
           <Typography variant="h3" gutterBottom>
             Attendence List
           </Typography>
-          <SelectSmall />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <InputLabel id="demo-select-small">Grade</InputLabel>
+                <Select
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={grade}
+                  label="Age"
+                  onChange={handleChange}
+                >
+                  {classData.map((item) => (
+                    <MenuItem value={item._id}>{item.className}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Typography>Select</Typography>
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <InputLabel id="demo-select-small">Subject</InputLabel>
+                  <Select
+                    labelId="demo-select-small"
+                    id="demo-select-small"
+                    value={subject}
+                    label="subject"
+                    onChange={handleTestChange}
+                  >
+                    {subOptions.map((item) => (
+                      <MenuItem value={item.subjectId}>{item.subName}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+ 
+              <TextField
+              size="small"
+                id="date"
+                label="Date"
+                type="date"
+                value={attdate}
+                onChange={handleDateChange}
+                sx={{ width: 180 }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <AttendenceTable />
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            className="ag-theme-alpine"
+            style={{ height: "75vh", width: "100vw", margin: 10 }}
+          >
+            <AgGridReact
+              columnDefs={columnDefsUpdate}
+              rowData={rowData}
+              defaultColDef={defaultColDef}
+            />
+          </div>
+        </div>
       </Container>
     </div>
   );

@@ -10,7 +10,6 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -25,31 +24,9 @@ import Drawer from "@mui/material/Drawer";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
+
+
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
@@ -82,7 +59,12 @@ const NavBar = () => {
   };
 
   const handleMenuClose = () => {
+    localStorage.removeItem("token");
     navigate("/");
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+  const onClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -109,10 +91,9 @@ const NavBar = () => {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={onClose}
     >
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -172,15 +153,15 @@ const NavBar = () => {
       <List>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageDash"}>
-              <ListItemText
-                primary={
-                  currentUser.isManagingStaff
-                    ? "Managing Staff"
-                    : "Teaching Staff"
-                }
-              />
-            </Link>
+            {/* <Link to={"/ManageDash"}> */}
+            <ListItemText
+              primary={
+                currentUser.isManagingStaff
+                  ? "Managing Staff"
+                  : "Teaching Staff"
+              }
+            />
+            {/* </Link> */}
           </ListItemButton>
         </ListItem>
         <Divider />
@@ -242,6 +223,24 @@ const NavBar = () => {
             </Link>
           </ListItemButton>
         </ListItem>
+        {/* {!currentUser.isManagingStaff && (
+          <>
+            <ListItem>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <Link to={"/viewMarks"}>
+                  <ListItemText primary={"ViewMarks"} />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+            <ListItem>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <Link to={"/viewAttendence"}>
+                  <ListItemText primary={"viewAttendence"} />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+          </>
+        )} */}
       </List>
     </Box>
   );
@@ -267,16 +266,6 @@ const NavBar = () => {
           >
             Eagle Schools
           </Typography>
-
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -325,6 +314,7 @@ const NavBar = () => {
       >
         {drawer}
       </Drawer>
+ 
     </Box>
   );
 };

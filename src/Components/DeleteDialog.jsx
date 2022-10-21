@@ -9,7 +9,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DeleteDialog({ popOpen, setPopOpen, removeUser ,item }) {
+export default function DeleteDialog({ popOpen, setPopOpen, removeUser ,item ,  isFromStudent ,  removeStudent}) {
   const handleClose = () => {
     setPopOpen(false);
   };
@@ -24,9 +24,9 @@ export default function DeleteDialog({ popOpen, setPopOpen, removeUser ,item }) 
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{` Do you want to delete the ${item.firstName}?`}</DialogTitle>
+        <DialogTitle>{` Do you want to delete the ${isFromStudent? "student":"staff"}`}</DialogTitle>
         <DialogActions>
-          <Button onClick={removeUser}>Yes</Button>
+          <Button onClick={isFromStudent ? removeStudent : removeUser}>Yes</Button>
           <Button onClick={handleClose}>No</Button>
         </DialogActions>
       </Dialog>

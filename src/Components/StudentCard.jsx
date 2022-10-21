@@ -12,7 +12,16 @@ import EditStudents from "./EditStudents";
 import DeleteDialog from "./DeleteDialog";
 import DefaultProfile from "../images/DefaultProfile.png";
 
-const StudentCard = ({ item }) => {
+const StudentCard = ({
+  item,
+  deleteStudents,
+  setIsGetStudents,
+  standard,
+  className,
+  snackOpen,
+  setSnackOpen,
+  handleSnackClose,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popOpen, setPopOpen] = React.useState(false);
 
@@ -20,10 +29,19 @@ const StudentCard = ({ item }) => {
     setPopOpen(true);
   };
 
+  const removeStudent = () => {
+    deleteStudents(item._id);
+    setPopOpen(false);
+  };
+
+  const refreshStudent = () => {
+    setIsGetStudents(true);
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+  console.log(item);
   return (
     <Card
       sx={{
@@ -37,6 +55,7 @@ const StudentCard = ({ item }) => {
         borderWidth: "3px",
         display: "flex",
         minWidth: 280,
+        maxWidth: 320,
         height: "110px",
       }}
     >
@@ -56,12 +75,12 @@ const StudentCard = ({ item }) => {
         disableGutters={true}
       >
         <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="h6">{item.name}</Typography>
+          <Typography variant="h6">{item.firstName}</Typography>
           <Typography variant="caption" color="text.secondary">
-            RollNo:{item.rollno}
+            RollNo:{item.rollNo}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            Class:{item.class}
+            Class:{className}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             Gender:{item.gender}
@@ -70,14 +89,14 @@ const StudentCard = ({ item }) => {
             <Typography variant="caption" color="text.secondary">
               DOB:{item.dob}
             </Typography>
-            <CardActions sx={{ mt: -2.5 }}>
+            <CardActions sx={{ mt: -2.5 ,  ml: -1.5 }}>
               <IconButton aria-label="Edit">
                 <EditIcon onClick={handleClick} sx={{ color: "white" }} />
               </IconButton>
               <IconButton
                 aria-label="delete"
                 onClick={handleClickOpen}
-                sx={{ ml: -2.5 }}
+                sx={{ ml: -0.5 }}
               >
                 <DeleteIcon sx={{ color: "white" }} />
               </IconButton>
@@ -85,11 +104,22 @@ const StudentCard = ({ item }) => {
           </div>
         </CardContent>
       </Box>
-      <EditStudents anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <EditStudents
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        item={item}
+        refreshStudent={refreshStudent}
+        standard={standard}
+        snackOpen={snackOpen}
+        setSnackOpen={setSnackOpen}
+      handleSnackClose={handleSnackClose}
+      />
       <DeleteDialog
         handleClickOpen={handleClickOpen}
         popOpen={popOpen}
         setPopOpen={setPopOpen}
+        removeStudent={removeStudent}
+        isFromStudent
       />
     </Card>
   );

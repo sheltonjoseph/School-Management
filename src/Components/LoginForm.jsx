@@ -15,15 +15,21 @@ const Login = () => {
   const [password, SetPassword] = useState("");
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.staff);
+  const { currentUser } = useSelector((state) => state.staff);
 
 
+  console.log(currentUser)
   const handleClick = async (e) => {
     e.preventDefault();
     dispatch(loginStart());
     try {
       const res = await SignupRequest.post("/auth/login", { email, password });
       dispatch(loginSuccess(res.data));
-      navigate("/ManageDash");
+      localStorage.setItem('token', currentUser.accessToken
+      );
+      currentUser.isManagingStaff
+        ? navigate("/ManageStaff")
+        : navigate("/MarkAttendence");
     } catch (err) {
       dispatch(loginFailure());
     }
@@ -41,12 +47,13 @@ const Login = () => {
         >
           <Grid item xs={12}>
             <TextField
-              label="Username"
+              label="Email"
               variant="standard"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
               value={email}
+              inputProps={{ "data-testid": "emailInput" }}
             ></TextField>
           </Grid>
           <Grid item xs={12}>
@@ -58,6 +65,7 @@ const Login = () => {
                 SetPassword(e.target.value);
               }}
               value={password}
+              inputProps={{ "data-testid": "passwordInput"}}
             ></TextField>
           </Grid>
           <Grid item xs={15}>
@@ -68,13 +76,14 @@ const Login = () => {
                 gutterBottom
                 sx={{ color: "red" }}
               >
-                Something went wrong
+                Incorrect Email or Password
               </Typography>
             )}
             <Button
               variant="contained"
               onClick={handleClick}
               disabled={!email || !password}
+              data-testid="login"
             >
               Login
             </Button>
