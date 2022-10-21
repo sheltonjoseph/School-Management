@@ -15,7 +15,7 @@ const Login = () => {
   const [password, SetPassword] = useState("");
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.staff);
-
+  const { currentUser } = useSelector((state) => state.staff);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -23,7 +23,9 @@ const Login = () => {
     try {
       const res = await SignupRequest.post("/auth/login", { email, password });
       dispatch(loginSuccess(res.data));
-      navigate("/ManageDash");
+      currentUser.isManagingStaff
+        ? navigate("/ManageStaff")
+        : navigate("/MarkAttendence");
     } catch (err) {
       dispatch(loginFailure());
     }
@@ -41,7 +43,7 @@ const Login = () => {
         >
           <Grid item xs={12}>
             <TextField
-              label="Username"
+              label="Email"
               variant="standard"
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -68,7 +70,7 @@ const Login = () => {
                 gutterBottom
                 sx={{ color: "red" }}
               >
-                Something went wrong
+                Incorrect Email or Password
               </Typography>
             )}
             <Button

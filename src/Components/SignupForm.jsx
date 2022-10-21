@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -16,11 +16,6 @@ import { SignupRequest } from "../RequestMethod";
 const options = [
   { label: "Managing Staff", value: "Managing Staff" },
   { label: "Teaching Staff", value: "Teaching Staff" },
-];
-const SubjectOptions = [
-  { label: "language", value: 1 },
-  { label: "English", value: 2 },
-  { label: "Maths", value: 3 },
 ];
 
 //password validation
@@ -62,6 +57,28 @@ const SignupForm = () => {
     img: "",
   };
   const [file, setFile] = React.useState(null);
+  const [subOptions, setSubOptions] = useState([]);
+  const [getSubOptions, setGetSubOptions] = useState(true);
+
+  const getSubLookup = async () => {
+    try {
+      const res = await SignupRequest.get("/sublookup");
+      console.log(res.data);
+      setSubOptions(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (getSubOptions) {
+      getSubLookup();
+      setGetSubOptions(false);
+    }
+  });
+
+  console.log(subOptions);
+
   const onSubmit = async (values) => {
     console.log(values);
 
@@ -71,7 +88,11 @@ const SignupForm = () => {
       console.log(body);
       const response = await SignupRequest.post("auth/register", {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...body, isManagingStaff: isManagingStaff }),
+        body: JSON.stringify({
+          ...body,
+          subjectId: body.subjects,
+          isManagingStaff: isManagingStaff,
+        }),
       });
       console.log(response);
     } catch (err) {
@@ -211,13 +232,13 @@ const SignupForm = () => {
                         name="subjects"
                         sx={{ minWidth: "380px" }}
                       >
-                        {SubjectOptions.map((item) => (
+                        {subOptions.map((item) => (
                           <MenuItem
                             fullWidth
-                            key={item.value}
-                            value={item.value}
+                            key={item.subjectId}
+                            value={item.subjectId}
                           >
-                            {item.label}
+                            {item.subName}
                           </MenuItem>
                         ))}
                       </Field>

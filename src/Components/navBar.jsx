@@ -112,7 +112,6 @@ const NavBar = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -172,7 +171,7 @@ const NavBar = () => {
       <List>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: "center" }}>
-            <Link to={"/ManageDash"}>
+            {/* <Link to={"/ManageDash"}> */}
               <ListItemText
                 primary={
                   currentUser.isManagingStaff
@@ -180,7 +179,7 @@ const NavBar = () => {
                     : "Teaching Staff"
                 }
               />
-            </Link>
+            {/* </Link> */}
           </ListItemButton>
         </ListItem>
         <Divider />

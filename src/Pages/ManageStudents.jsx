@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import NavBar from "../Components/navBar";
 import Typography from "@mui/material/Typography";
@@ -9,19 +9,60 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { sampleStudent } from "../sampledata";
 import EditStudents from "../Components/EditStudents";
+import { userRequest } from "../RequestMethod";
 
 const ManageStudents = () => {
   const [grade, setGrade] = React.useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isGetStudents, setIsGetStudents] = useState(true);
+  const [allStudents, setAllStudents] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [standard, setStandard] = useState([]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleChange = (event) => {
+    console.log("allStudents", allStudents);
+    console.log("event.target.value", event.target.value);
+    let filterStudents = allStudents.filter(
+      (c) => c.classId === event.target.value
+    );
+    console.log(filterStudents);
+    setStudents(filterStudents);
     setGrade(event.target.value);
   };
+
+  const getStudents = async () => {
+    try {
+      const res = await userRequest.get("/students");
+      const classRes = await userRequest.get("/class");
+      setAllStudents(res.data);
+      setStandard(classRes.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log(standard);
+
+  useEffect(() => {
+    if (isGetStudents) {
+      getStudents();
+      setIsGetStudents(false);
+    }
+  });
+
+  const deleteStudents = async (id) => {
+    try {
+      await userRequest.delete(`/students/${id}`);
+      setStudents(students.filter((students) => students._id !== id));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <div>
       <NavBar />
@@ -53,27 +94,27 @@ const ManageStudents = () => {
                 label="Age"
                 onChange={handleChange}
               >
-                <MenuItem value={1}>one</MenuItem>
-                <MenuItem value={2}>Two</MenuItem>
-                <MenuItem value={3}>Three</MenuItem>
+                {standard.map((item) => (
+                  <MenuItem value={item._id}>{item.className}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <Button
-            variant="contained"
-            endIcon={<AddCircleIcon />}
-            sx={{
-              background: "#d1af35",
-              "&:hover": {
-                backgroundColor: "#d1af35",
-              },
-            }}
-            onClick={handleClick}
-          >
-            Add Student
-          </Button>
+              variant="contained"
+              endIcon={<AddCircleIcon />}
+              sx={{
+                background: "#d1af35",
+                "&:hover": {
+                  backgroundColor: "#d1af35",
+                },
+              }}
+              onClick={handleClick}
+            >
+              Add Student
+            </Button>
           </div>
         </div>
- 
+
         <div
           style={{
             display: "flex",
@@ -82,14 +123,27 @@ const ManageStudents = () => {
             margin: "15px",
           }}
         >
-          {sampleStudent.map((item) => (
-            <StudentCard item={item} />
-          ))}
+          {students.map((item) => {
+            let className;
+            let currentClass = standard.filter((e) => e._id === item.classId);
+            className = currentClass[0]?.className;
+            return (
+              <StudentCard
+                item={item}
+                deleteStudents={deleteStudents}
+                setIsGetStudents={setIsGetStudents}
+                standard={standard}
+                className={className}
+              />
+            );
+          })}
         </div>
         <EditStudents
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
+          setIsGetStudents={setIsGetStudents}
           isFromManageStudents
+          standard={standard}
         />
       </Container>
     </div>

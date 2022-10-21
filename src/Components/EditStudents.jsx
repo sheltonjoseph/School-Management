@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -11,15 +11,85 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
+import { userRequest } from "../RequestMethod";
 
-const EditStudents = ({ anchorEl, setAnchorEl, isFromManageStudents }) => {
-  const [grade, setGrade] = React.useState("");
-
+const EditStudents = ({
+  anchorEl,
+  setAnchorEl,
+  isFromManageStudents,
+  item,
+  standard,
+  setIsGetStudents,
+  refreshStudent
+}) => {
+  const [firstName, setFirstName] = useState(
+    isFromManageStudents ? "" : item.firstName
+  );
+  const [lastName, setLastName] = useState(
+    isFromManageStudents ? "" : item.lastName
+  );
+  const [rollNo, setrollNo] = useState(isFromManageStudents ? "" : item.rollNo);
+  const [classId, setClassId] = useState(
+    isFromManageStudents ? "" : item.classId
+  );
+  const [gender, setGender] = useState(isFromManageStudents ? "" : item.gender);
+  const [dob, setDob] = useState(isFromManageStudents ? "" : item.dob);
+ 
   const handleChange = (event) => {
-    setGrade(event.target.value);
+    setClassId(event.target.value);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onDone = async (e) => {
+    e.preventDefault();
+    try {
+      const body = { firstName, lastName, rollNo, gender, dob , classId};
+      console.log(body)
+      const response = await userRequest.post("/students",body);
+      console.log(response);
+      setIsGetStudents(true);
+      setFirstName("");
+      setLastName("");
+      setrollNo("");
+      setGender("");
+      setClassId("");
+      setAnchorEl(null);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  
+ console.log(standard)
+
+//   useEffect(() => {
+//     const getClass = async () => {
+//       try {
+//         const classRes = await userRequest.get("/class");
+//         console.log(classRes.data)
+//         setStandard(classRes.data);
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     };
+//     getClass()
+//   });
+
+
+  const onUpdate = async (e) => {
+    e.preventDefault();
+
+    try {
+      const body = { firstName, lastName, rollNo, gender, dob ,classId};
+      const response = await userRequest.put(`/students/${item._id}`,body);
+      console.log(response);
+      refreshStudent();
+      setAnchorEl(null);
+    } catch (err) {
+      console.error(err.message);
+    }
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -50,44 +120,59 @@ const EditStudents = ({ anchorEl, setAnchorEl, isFromManageStudents }) => {
           id="standard-basic"
           label="FirstName"
           variant="standard"
+          value={firstName}
           sx={{ width: "100%" }}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+          }}
         />
         <TextField
           id="standard-basic"
           label="LastName"
+          value={lastName}
           variant="standard"
           sx={{ width: "100%" }}
+          onChange={(e) => {
+            setLastName(e.target.value);
+          }}
         />
         <TextField
           id="standard-basic"
           label="Roll no"
+          value={rollNo}
           variant="standard"
           sx={{ width: "100%" }}
+          onChange={(e) => {
+            setrollNo(e.target.value);
+          }}
         />
         <FormControl variant="standard" sx={{ width: "100%" }}>
           <InputLabel id="demo-simple-select-standard-label">Grade</InputLabel>
           <Select
             labelId="demo-simple-select-standard-label"
             id="demo-simple-select-standard"
-            value={grade}
+            value={classId}
             onChange={handleChange}
             label="Grade"
           >
-            <MenuItem value={1}>One</MenuItem>
-            <MenuItem value={2}>Two</MenuItem>
-            <MenuItem value={3}>Three</MenuItem>
+             {standard.map((item) => (
+                  <MenuItem value={item._id}>{item.className}</MenuItem>
+                ))}
           </Select>
         </FormControl>
         <FormControl sx={{ width: "100%", marginTop: 1 }}>
           <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="female"
+            defaultValue={gender}
             name="radio-buttons-group"
             sx={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-evenly",
+            }}
+            onChange={(e) => {
+              setGender(e.target.value);
             }}
           >
             <FormControlLabel
@@ -104,6 +189,10 @@ const EditStudents = ({ anchorEl, setAnchorEl, isFromManageStudents }) => {
           label="DOB"
           variant="standard"
           sx={{ width: "100%" }}
+          value={dob}
+          onChange={(e) => {
+            setDob(e.target.value);
+          }}
         />
         <Button
           variant="contained"
@@ -114,6 +203,7 @@ const EditStudents = ({ anchorEl, setAnchorEl, isFromManageStudents }) => {
             },
             marginTop: 3,
           }}
+          onClick={isFromManageStudents ? onDone : onUpdate}
         >
           Done
         </Button>

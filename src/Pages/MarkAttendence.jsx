@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import NavBar from "../Components/navBar";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,8 +11,10 @@ import "ag-grid-enterprise";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import Button from "@mui/material/Button";
+import { userRequest, SignupRequest } from "../RequestMethod";
 
 const AttendenceTable = () => {
+
   const columnDefs = [
     { field: "Date" },
     { field: "Roll_No" },
@@ -24,6 +26,7 @@ const AttendenceTable = () => {
     },
   ];
 
+ 
   const rowData = [
     {
       Date: "13/12/22",
@@ -68,13 +71,34 @@ const AttendenceTable = () => {
 };
 
 const MarkAttendence = () => {
+
+  const [isGetData, setIsGetData] = useState(true);
+  const[classData,setClassData] = useState([])
   const SelectGrade = () => {
     const [grade, setGrade] = React.useState("");
 
     const handleChange = (event) => {
       setGrade(event.target.value);
     };
-
+    const getClassData = async () => {
+      try {
+        const res = await userRequest.get("/class");
+        //  console.log(res)
+        setClassData(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  
+  
+    useEffect(() => {
+      if (isGetData) {
+        getClassData();
+        setIsGetData(false);
+      }
+    });
+  
+    console.log(classData)
     return (
       <FormControl sx={{ m: 5, minWidth: 120 }} size="small">
         <InputLabel id="demo-select-small">Grade</InputLabel>
@@ -85,36 +109,36 @@ const MarkAttendence = () => {
           label="Age"
           onChange={handleChange}
         >
-          <MenuItem value={1}>Grade 1</MenuItem>
-          <MenuItem value={2}>Grade 2</MenuItem>
-          <MenuItem value={3}>Grade 3</MenuItem>
+    {classData.map((item) => (
+                  <MenuItem value={item._id}>{item.className}</MenuItem>
+                ))}
         </Select>
       </FormControl>
     );
   };
-  const SelectSubject = () => {
-    const [subject, SelectSubject] = React.useState("");
+  // const SelectSubject = () => {
+  //   const [subject, SelectSubject] = React.useState("");
 
-    const handleTestChange = (event) => {
-      SelectSubject(event.target.value);
-    };
+  //   const handleTestChange = (event) => {
+  //     SelectSubject(event.target.value);
+  //   };
 
-    return (
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-        <InputLabel id="demo-select-small">Subject</InputLabel>
-        <Select
-          labelId="demo-select-small"
-          id="demo-select-small"
-          value={subject}
-          label="subject"
-          onChange={handleTestChange}
-        >
-          <MenuItem value={1}>MATHS</MenuItem>
-          <MenuItem value={2}>SCIENCE</MenuItem>
-        </Select>
-      </FormControl>
-    );
-  };
+  //   return (
+  //     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+  //       <InputLabel id="demo-select-small">Subject</InputLabel>
+  //       <Select
+  //         labelId="demo-select-small"
+  //         id="demo-select-small"
+  //         value={subject}
+  //         label="subject"
+  //         onChange={handleTestChange}
+  //       >
+  //         <MenuItem value={1}>MATHS</MenuItem>
+  //         <MenuItem value={2}>SCIENCE</MenuItem>
+  //       </Select>
+  //     </FormControl>
+  //   );
+  // };
   return (
     <div>
       <NavBar />
@@ -144,7 +168,7 @@ const MarkAttendence = () => {
               <Typography>Select</Typography>
               <SelectGrade />
             </div>
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -153,7 +177,7 @@ const MarkAttendence = () => {
             >
               <Typography>Select</Typography>
               <SelectSubject />
-            </div>
+            </div> */}
           </div>
         </div>
 

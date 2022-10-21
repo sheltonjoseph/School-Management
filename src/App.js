@@ -16,14 +16,14 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/ManageDash" element={<ManageDash />} />
+        {/* <Route exact path="/ManageDash" element={<ManageDash />} /> */}
         <Route exact path="/ManageStaff" element={<ManageStaff />} />
         <Route exact path="/ManageStudents" element={<ManageStudents />} />
         <Route exact path="/ManageAttendence" element={<ManageAttendence />} />
         <Route exact path="/ManageMarks" element={<ManageMarks />} />
         <Route exact path="/ManageClass" element={<ManageClass />} />
         <Route exact path="/MarkAttendence" element={<MarkAttendence />} />
-        <Route exact path="/EnterMarks " element={<EnterMarks />} />
+        <Route exact path="/EnterMarks" element={<EnterMarks />} />
       </Routes>
     </Router>
   );

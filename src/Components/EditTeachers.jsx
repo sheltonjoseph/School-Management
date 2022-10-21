@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -14,6 +14,8 @@ import Button from "@mui/material/Button";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import { userRequest } from "../RequestMethod";
+import { SignupRequest } from "../RequestMethod";
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,14 +28,17 @@ const MenuProps = {
   },
 };
 
-const subjets = ["Language", "English", "Maths", "Science", "Social"];
 
-const EditTeachers = ({ anchorEl, setAnchorEl, item }) => {
+
+const EditTeachers = ({ anchorEl, setAnchorEl, item, refreshUser,subOptions}) => {
+  let subjectName = [];
   const [firstName, setFirstName] = useState(item.firstName);
   const [lastName, setLastName] = useState(item.lastName);
   const [email, setEmail] = useState(item.email);
-  const gender = item.gender;
-  const [subjects, setSubjets] = useState([]);
+  const [gender,setGender] = useState(item.gender);
+  const [subjects, setSubjets] = useState(subjectName);
+
+
 
   const handleChange = (event) => {
     const {
@@ -45,16 +50,29 @@ const EditTeachers = ({ anchorEl, setAnchorEl, item }) => {
     );
   };
 
+console.log(subjectName)
+
+  // useEffect(() => {
+  //   const getSubLookup = async () => {
+  //     try {
+  //       const res = await SignupRequest.get("/sublookup");
+  //       console.log(res.data);
+  //       setSubOptions(res.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getSubLookup()
+  // });
+
   const onUpdate = async (e) => {
     e.preventDefault();
     try {
-      const body = { firstName, lastName, email, gender, subjects };
-      const response = await userRequest.put(`/staffs/${item._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const body = { firstName, lastName, email, gender};
+      const response = await userRequest.put(`/staffs/${item._id}`,body);
+      console.log("---");
       console.log(response);
+      refreshUser();
       setAnchorEl(null);
     } catch (err) {
       console.error(err.message);
@@ -132,6 +150,9 @@ const EditTeachers = ({ anchorEl, setAnchorEl, item }) => {
               flexDirection: "row",
               justifyContent: "space-evenly",
             }}
+            onChange={(e) => {
+              setGender(e.target.value);
+            }}
           >
             <FormControlLabel
               value="female"
@@ -143,7 +164,7 @@ const EditTeachers = ({ anchorEl, setAnchorEl, item }) => {
           </RadioGroup>
         </FormControl>
 
-        <FormControl sx={{ marginTop: 2, width: "100%" }}>
+        {/* <FormControl sx={{ marginTop: 2, width: "100%" }}>
           <InputLabel id="demo-simple-select-filled-label">Subjects</InputLabel>
           <Select
             multiple
@@ -151,17 +172,16 @@ const EditTeachers = ({ anchorEl, setAnchorEl, item }) => {
             variant="standard"
             value={subjects}
             onChange={handleChange}
-            renderValue={(selected) => selected.join(", ")}
+            renderValue={(selected) => selected.join(",")}
             MenuProps={MenuProps}
           >
-            {subjets.map((name) => (
-              <MenuItem key={name} value={name}>
-                <Checkbox checked={subjects.indexOf(name) > -1} />
-                <ListItemText primary={name} />
+            {subOptions.map((item) => (
+              <MenuItem key={item.subjectId} value={item.subjectId}>
+                <ListItemText primary={item.subName} />
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <Button
           variant="contained"
           sx={{

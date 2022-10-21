@@ -12,7 +12,7 @@ import CardMedia from "@mui/material/CardMedia";
 import DefaultProfile from "../images/DefaultProfile.png";
 
 
-const EmployeeCard = ({ item , deleteStaff ,  ...prop }) => {
+const EmployeeCard = ({ item , subjectName, deleteStaff ,setIsGetUser , subOptions }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popOpen, setPopOpen] = React.useState(false);
 
@@ -27,11 +27,16 @@ const EmployeeCard = ({ item , deleteStaff ,  ...prop }) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const refreshUser = () => {
+    setIsGetUser(true);
+    };
+  
 
+  //  console.log(subjectName)
   return (
     <Card
       sx={{
-        maxWidth: 275,
+        maxWidth: 200,
         minWidth: 175,
         boxShadow: 10,
         margin: 2,
@@ -57,11 +62,14 @@ const EmployeeCard = ({ item , deleteStaff ,  ...prop }) => {
           email: {item.email}
         </Typography>
         <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
-          Subjects : {item.subjectId}
+          gender : {item.gender}
         </Typography>
         <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
-          Role:{item.role}
+          Role:{item.role} 
         </Typography>
+        {/* <Typography sx={{ fontSize: 14, color: "white" }} gutterBottom>
+          Subjets:{subjectName} 
+        </Typography> */}
       </CardContent>
       <CardActions>
         <IconButton aria-label="add to favorites" onClick={handleClick}>
@@ -71,7 +79,7 @@ const EmployeeCard = ({ item , deleteStaff ,  ...prop }) => {
           <DeleteIcon sx={{ color: "white" }} />
         </IconButton>
       </CardActions>
-      <EditTeachers anchorEl={anchorEl} setAnchorEl={setAnchorEl} item={item}/>
+      <EditTeachers anchorEl={anchorEl} setAnchorEl={setAnchorEl} item={item} refreshUser={refreshUser } subjectName={subjectName} subOptions={subOptions}/>
       <DeleteDialog
         handleClickOpen={handleClickOpen}
         popOpen={popOpen}
